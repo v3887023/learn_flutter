@@ -18,16 +18,16 @@ class _IconMakerPageState extends State<IconMakerPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(8),
-            color: Colors.blue,
             child: const Text("Icon Maker", style: TextStyle(fontSize: 20)),
           ),
-          const Padding(
+          const Expanded(
+              child: Padding(
             padding: EdgeInsets.all(8),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [LeftPanel(), PreviewPanel(), RightPanel()],
             ),
-          )
+          ))
         ],
       ),
     );
@@ -39,11 +39,47 @@ class LeftPanel extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    return const SizedBox(
-        width: 200,
+    return SizedBox(
+        width: 250,
         child: Column(
-          children: [ProjectSectionWidget(), Text("data")],
+          children: [
+            const ProjectSectionWidget(),
+            ExportSettingsSectionWidget()
+          ],
         ));
+  }
+}
+
+class ExportSettingsSectionWidget extends StatelessWidget {
+  final List<String> options = ["导出到工程", "导出到文件夹"];
+
+  ExportSettingsSectionWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("导出设置"),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: options.map((e) {
+                  return SizedBox(
+                      child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            e,
+                            style: const TextStyle(color: Colors.blue),
+                          )));
+                }).toList())
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -158,8 +194,7 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                         onPressed: () {
                           _Utils.showProjectItemDialog(context,
                               projectItem: projectItem,
-                              editable: true, projectItemUpdateCallback:
-                                  (_) {
+                              editable: true, projectItemUpdateCallback: (_) {
                             setState(() {});
                           });
                         },
