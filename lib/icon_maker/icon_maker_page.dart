@@ -159,10 +159,8 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                           _Utils.showProjectItemDialog(context,
                               projectItem: projectItem,
                               editable: true, projectItemUpdateCallback:
-                                  (ProjectItem projectItem) {
-                            setState(() {
-                              widget.projectItems.add(projectItem);
-                            });
+                                  (_) {
+                            setState(() {});
                           });
                         },
                         child: const Icon(Icons.edit_outlined, size: 15)),
