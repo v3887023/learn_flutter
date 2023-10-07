@@ -18,7 +18,8 @@ class _IconMakerPageState extends State<IconMakerPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(8),
-            child: const Text("Icon Maker", style: TextStyle(fontSize: 20)),
+            color: Colors.black12,
+            child: const Text("Icon Maker", style: TextStyle(fontSize: 24)),
           ),
           const Expanded(
               child: Padding(
