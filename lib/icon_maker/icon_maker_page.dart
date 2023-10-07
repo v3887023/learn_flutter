@@ -23,12 +23,12 @@ class _IconMakerPageState extends State<IconMakerPage> {
           ),
           const Expanded(
               child: Padding(
-            padding: EdgeInsets.all(8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [LeftPanel(), PreviewPanel(), RightPanel()],
-            ),
-          ))
+                padding: EdgeInsets.all(8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [LeftPanel(), PreviewPanel(), RightPanel()],
+                ),
+              ))
         ],
       ),
     );
@@ -113,7 +113,7 @@ class ProjectSectionState extends State<ProjectSectionWidget> {
       Container(
           padding: const EdgeInsets.only(top: 4, bottom: 4, left: 8),
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             const Text(
               "项目",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -122,13 +122,13 @@ class ProjectSectionState extends State<ProjectSectionWidget> {
                 onPressed: () {
                   _Utils.showProjectItemDialog(context, editable: true,
                       projectItemUpdateCallback: (ProjectItem projectItem) {
-                    setState(() {
-                      projectItems.add(projectItem);
-                    });
-                  });
+                        setState(() {
+                          projectItems.add(projectItem);
+                        });
+                      });
                 },
                 child:
-                    const Text("添加新项目", style: TextStyle(color: Colors.blue)))
+                const Text("添加新项目", style: TextStyle(color: Colors.blue)))
           ])),
       Container(
         color: Colors.grey[800],
@@ -143,16 +143,27 @@ class ProjectSectionState extends State<ProjectSectionWidget> {
                 child: ListView.builder(
                     itemCount: projectItems.length,
                     itemBuilder: (_, index) {
-                      return GestureDetector(
-                          onTap: () {
+                      return MouseRegion(
+                          onEnter: (event) {
                             setState(() {
-                              for (var element in projectItems) {
-                                element.selected = false;
-                              }
-                              projectItems[index].selected = true;
+                              projectItems[index].hovered = true;
                             });
                           },
-                          child: ProjectItemWidget(projectItems, index));
+                          onExit: (event) {
+                            setState(() {
+                              projectItems[index].hovered = false;
+                            });
+                          },
+                          child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  for (var element in projectItems) {
+                                    element.selected = false;
+                                  }
+                                  projectItems[index].selected = true;
+                                });
+                              },
+                              child: ProjectItemWidget(projectItems, index)));
                     }),
               ),
             )),
@@ -176,7 +187,7 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
   Widget build(BuildContext context) {
     var projectItem = widget.projectItems[widget.index];
     return Container(
-      color: projectItem.selected ? Colors.blue : Colors.transparent,
+      color: projectItem.selected ? Colors.blue : projectItem.hovered ? Colors.grey[700] : Colors.transparent,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -196,8 +207,8 @@ class _ProjectItemWidgetState extends State<ProjectItemWidget> {
                           _Utils.showProjectItemDialog(context,
                               projectItem: projectItem,
                               editable: true, projectItemUpdateCallback: (_) {
-                            setState(() {});
-                          });
+                                setState(() {});
+                              });
                         },
                         child: const Icon(Icons.edit_outlined, size: 15)),
                   )),
@@ -249,6 +260,7 @@ class ProjectItem {
   String name;
   String path;
   bool selected = false;
+  bool hovered = false;
 
   ProjectItem(this.name, {this.path = ""});
 
@@ -260,8 +272,8 @@ class ProjectItem {
 class _Utils {
   static void showProjectItemDialog(BuildContext context,
       {ProjectItem? projectItem,
-      bool editable = false,
-      Function(ProjectItem)? projectItemUpdateCallback}) {
+        bool editable = false,
+        Function(ProjectItem)? projectItemUpdateCallback}) {
     showGeneralDialog(
         context: context,
         barrierDismissible: true,
